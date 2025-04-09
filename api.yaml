@@ -1,0 +1,369 @@
+openapi: 3.0.0 
+info:
+ title: Hotel_application API Documentation
+ description: API documentation for Hotel_application 
+ version: 1.0.0 
+ contact:
+   url: https://www.example.com/support
+   email: mukeshpabolu123@gmail.com 
+servers:
+ - url: http://192.168.1.9:3050
+   description: Development server 
+ - url: https://www.example.com
+   description: Production server 
+tags:
+ - name: Workers
+   description: Operations related to hotel workers
+ - name: Menu Items
+   description: Operations related to menu items  
+
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: token 
+      
+security:
+  - tokenAuth: [] 
+paths:
+  /workers/login:
+    post:
+      summary: Login a worker
+      description: Worker's credentials to login
+      tags: 
+       - Workers 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                  description: Worker's email
+                password:
+                  type: string
+                  required: true
+                  description: Worker's password
+      responses:
+        '200':
+          description: Worker logged in successfully
+        '400':
+          description: Invalid email or password
+        '500':
+          description: Server error
+      
+      
+  /workers/addworker:
+    post:
+      summary: Add a new worker
+      description: Add a new worker to the hotel
+      tags:
+        - Workers
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                  description: Worker's name
+                age:
+                  type: integer
+                  required: true
+                  description: Worker's age
+                work:
+                 type: string
+                 required: true
+                 description: Worker's work position
+                mobile:
+                  type: string
+                  required: true
+                  description: Worker's mobile number
+                email:
+                  type: string
+                  required: true
+                  description: Worker's email
+                address:
+                  type: string
+                  required: true
+                  description: Worker's address
+                salary:
+                  type: integer
+                  required: true
+                  description: Worker's salary 
+                password:
+                  type: string
+                  required: true
+                  description: Worker's password
+      responses:
+        '200':
+          description: Worker added successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error 
+  /workers/getallworkers:
+     get:
+      summary: Get all workers
+      description: Get all workers in the hotel
+      tags:
+        - Workers
+      parameters:
+        - name: email
+          in: header
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: All workers retrieved successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+  /workers/getaworker/{worktype}:
+      get:
+        summary: Get a worker by ID 
+        description: Get a specific worker by their work type
+        tags:
+          - Workers
+        parameters:
+          - name: worktype
+            in: path
+            required: true
+            schema:
+              type: string
+              description: Worker's work type
+          - name: email
+            in: header
+            required: true
+            schema:
+              type: string
+              format: email
+        responses:
+          '200':
+            description: Worker retrieved successfully
+          '400':
+            description: Bad request
+          '500':
+            description: Server error
+  /workers/updateworker/{workerid}:
+     put:
+       summary: Update a worker by ID
+       description: Update a specific worker by their ID
+       tags:
+         - Workers
+       parameters:
+         - name: workerid
+           in: path
+           required: true
+           schema:
+             type: string
+             description: Worker's unique ID
+         - name: email
+           in: header
+           required: true
+           schema:
+             type: string
+             format: email
+       requestBody:
+           required: true 
+           content:
+             application/json:
+               schema:
+                 type: object
+                 properties:
+                   
+       responses:
+         '200':
+           description: Worker updated successfully
+         '400':
+           description: Bad request
+         '500':
+           description: Server error
+  /workers/deleteworker/{workerid}:
+     delete:
+      summary: Delete a worker by ID
+      description: Delete a specific worker by their ID
+      tags:
+        - Workers
+      parameters:
+        - name: workerid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Worker's unique ID
+        - name: email
+          in: header
+          required: true
+          schema:
+            type: string
+            format: email 
+      responses:
+        '200':
+          description: Worker deleted successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error 
+  /menu/additem:
+    post:
+      summary: Add a new menu item
+      description: Add a new menu item to the hotel
+      tags:
+        - Menu Items
+      parameters:
+        - name: email
+          in: header
+          required: true
+          schema:
+            type: string
+            format: email
+      requestBody:
+        required: true 
+        content:
+         application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                  description: Menu item's name
+                price:
+                  type: integer
+                  required: true
+                  description: Menu item's price
+                taste:
+                   type: string
+                   required: true
+                   description: Menu item's taste       
+                is_drink:
+                   type: boolean
+                   required: true
+                   description: Menu item's drink or not  
+                ingredients:
+                   type: array
+                   items:
+                     type: string
+                     description: Menu item's ingredients
+                num_sales:
+                  type: integer
+                  description: Menu item's number of sales
+      responses:
+        '200':
+          description: Menu item added successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error 
+  /menu/allitems:
+     get:
+      summary: Get all menu items
+      description: Get all menu items in the hotel
+      tags:
+        - Menu Items
+      responses:
+        '200':
+          description: All menu items retrieved successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error 
+  /menu/itembytaste/{taste}:
+       get:
+        summary: Get a menu item by taste
+        description: Get a specific menu item by their taste
+        tags:
+          - Menu Items
+        parameters:
+          - name: taste
+            in: path
+            required: true
+            schema:
+              type: string
+              description: Menu items by taste
+        responses:
+          '200':
+            description: Menu item retrieved successfully
+          '400':
+            description: Bad request
+          '500':
+            description: Server error
+  /menu/updateitem/{itemid}:
+     put:
+      summary: Update a menu item by ID
+      description: Update a specific menu item by their ID
+      tags:
+        - Menu Items
+      parameters:
+        - name: itemid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Menu item's unique ID
+        -  name: email
+           in: header
+           required: true
+           schema:
+             type: string
+             format: email
+             description: Worker's email
+      requestBody:
+        required: true 
+        content:
+         application/json:
+            schema:
+              type: object
+              properties:
+      responses:
+        '200':
+          description: Menu item updated successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error 
+  /menu/deleteitem/{itemid}:
+     delete:
+      summary: Delete a menu item by ID
+      description: Delete a specific menu item by their ID
+      tags:
+        - Menu Items
+      parameters:
+        - name: itemid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Menu item's unique ID
+        -  name: email
+           in: header
+           required: true
+           schema:
+             type: string
+             format: email
+             description: Worker's email 
+      responses:
+        '200':
+          description: Menu item deleted successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+        
+        
+              
+
+
+    
+  
